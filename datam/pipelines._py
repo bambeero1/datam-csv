@@ -1,0 +1,37 @@
+import sys
+from scrapy import log
+from scrapy.conf import settings
+from scrapy.exceptions import DropItem
+import pymongo
+import json
+
+
+class DuplicatesPipeline(object):
+    def __init__(self):
+        connection = pymongo.MongoClient(
+            "mongodb://admin:Iaqu9102Ya@68.183.129.197:27018/haraj")
+        db = connection['haraj']
+        self.collection = db['data2']
+        # self.collection=db['data2']
+        self.ids_seen = set()
+        for item in self.collection.find():
+            self.ids_seen.add(item['id'])
+        print("Number of Items in database" + str(len(self.ids_seen)))
+
+    def process_item(self, item, spider):
+        valid = True
+        for data in item:
+            if not data:
+                valid = False
+                raise DropItem("Missing {0}!".format(data))
+
+        if valid and item['id'] not in self.ids_seen:
+            self.collection.insert(dict(item))
+            self.ids_seen.add(item['id'])
+            log.msg("Record added to MongoDB database!",
+                    level=log.DEBUG, spider=spider)
+
+        else:
+            raise DropItem("Item id {0} already exists!".format(item['id']))
+
+        return item
