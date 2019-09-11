@@ -10,7 +10,7 @@ from scrapy.spiders import CrawlSpider, Rule
 
 
 class harajCrawler(CrawlSpider):
-    name = 'harajCrawler'
+    name = 'harajContact'
     allowed_domains = ['haraj.com.sa']
     start_urls = ['https://haraj.com.sa/']
 
