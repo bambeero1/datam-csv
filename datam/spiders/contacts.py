@@ -60,14 +60,14 @@ class harajCrawler(CrawlSpider):
         item = datamItem()
         item['usern'] = usern
         #item['body'] = body
-        #item['title'] = title
+        item['title'] = title
         item['tags'] = tags
         #item['images'] = images
-        #item['id'] = id
+        item['id'] = id
         item['date'] = date
         item['contact'] = contact
         #item['url'] = response.url
-        #item['relatedtext'] = relatedtext
+        item['relatedtext'] = relatedtext
         item['city'] = city
 
         yield item
